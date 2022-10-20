@@ -8,6 +8,7 @@ class FibonacciController < ApplicationController
             result = fast_fib(params["n"])
         }
 
+        log = Log.create(val: params["n"], result: result, runtime: time)
         # time2 = Benchmark.ms {
         #     result2 = traditional_fib(params["n"])
         # }
