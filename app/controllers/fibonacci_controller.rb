@@ -1,5 +1,10 @@
 class FibonacciController < ApplicationController
 
+    def index
+        logs = Log.all.order("created_at DESC").limit(10)
+        render json: logs, only: [:val, :result, :runtime, :created_at]
+    end
+
     def show
 
         result = 0
@@ -15,7 +20,7 @@ class FibonacciController < ApplicationController
 
         render json: {
             "value": params["n"],
-            "result": result,
+            "result": result.to_s,
             "runtime": time 
             # "result": [result, result2],
             # "runtime": [time, time2]
