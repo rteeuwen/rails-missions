@@ -7,24 +7,29 @@ class FibonacciController < ApplicationController
 
     def show
 
-        result = 0
-        # result2 = 0
-        time = Benchmark.ms {
-            result = fast_fib(params["n"])
-        }
+        if params["n"].blank? || params["n"] < 0
+            render json: {message: 'Input number cannot be blank or negative.'}, status: 400
+        else
 
-        log = Log.create(val: params["n"], result: result, runtime: time)
-        # time2 = Benchmark.ms {
-        #     result2 = traditional_fib(params["n"])
-        # }
+            result = 0
+            # result2 = 0
+            time = Benchmark.ms {
+                result = fast_fib(params["n"])
+            }
 
-        render json: {
-            "value": params["n"],
-            "result": result.to_s,
-            "runtime": time 
-            # "result": [result, result2],
-            # "runtime": [time, time2]
-        }
+            log = Log.create(val: params["n"], result: result, runtime: time)
+            # time2 = Benchmark.ms {
+            #     result2 = traditional_fib(params["n"])
+            # }
+
+            render json: {
+                "value": params["n"],
+                "result": result.to_s,
+                "runtime": time 
+                # "result": [result, result2],
+                # "runtime": [time, time2]
+            }
+        end
     end
 
     # Fast Doubling Fibonacci Algorithm - Ruby Implementation
@@ -36,7 +41,6 @@ class FibonacciController < ApplicationController
     #
 
     def fast_fib(n)
-        raise(ArgumentError, 'Input number cannot be negative.') if n < 0
         _fib(n)[0]
     end
 
